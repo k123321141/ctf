@@ -1,0 +1,5 @@
+這次執行檔是64bit 所以記憶體位置是8 byte
+利用gets算好offset就可以直接蓋過main的ret addr
+跳到callme function
+
+(cat pwn1_input;cat) | nc csie.ctf.tw 10120

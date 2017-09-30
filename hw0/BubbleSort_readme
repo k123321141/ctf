@@ -1,0 +1,8 @@
+這次執行檔是32bit 所以記憶體位置是4 byte 與一個int大小相同
+當輸入'How many element do you want to sort'時 使用scanf接收一個 %d
+不過在後面的判斷式則取用int最小的一個byte，且做unsigned int解釋
+於是輸入負值時，可以通過Array length的判斷式，而且會排序超過Array的數量
+利用排序超過main的stack frame，就可以操作main的ret addr，上層的stack frame會壞掉，不過沒關係
+算好輸入的ret addr以及其他stack中的值，設定好排序的數量，就可以操作main的ret addr
+這邊我附上的input是跳到DarkSoul+6
+(cat BubbleSort_input;cat) | nc csie.ctf.tw 10121

@@ -1,0 +1,19 @@
+strace, trace system call
+ltrace, trace library call
+
+segment, run time memory layout -> stack heap..
+section, binary file layout -> text,bss,data..
+
+
+vim -b ,--binary
+開啟vim 後 使用:%!xxd進入16進位顯示模式
+可以直接改binary file
+改完後使用:%!xxd -r 改回預設顯示模式 存檔
+
+ASLR
+address Space Layout Reandomization
+
+PIE
+position independent executables
+
+Stack Canaries

@@ -1,0 +1,39 @@
+ 8048778 input_array進入點 參數int Len 
+while loop scanf接受輸入
+
+8048798 scanf 接受排序數量
+
+80487a7 如果排序數量比數列還大 則print 並結束
+
+08048628 bubble sort eax為要排序的數量 
+
+80486cc 是condition check $ebp-0x4是 i while的counter 要到eax才會停
+
+8048640-8048646 是 j++ 然後把j推到ebp-0x8的位置
+
+$ebp-4 是i $ebp-8 是j
+
+Sort:
+Input = 9 8 7 6 5 4 3 2 1 排5個
+L -1
+	for i=0 to 4(not include 255) :
+		for j= i+1 to 4:
+
+
+9 8 7 6 5 4 3 2 1 0
+
+5 9 8 7 6
+
+804864b - 804866d edx = arr[i],eax = arr[j]
+0x804866f 如果arr[I] 比arr[j]小的話jump (沒jump的話換位置)
+
+0x8048682 hard code 位置
+
+80486bb 檢查j
+
+stack arr[0]
+prinf(“%d”)
+
+
+
+

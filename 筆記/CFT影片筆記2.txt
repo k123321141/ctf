@@ -1,0 +1,7 @@
+file 查看執行檔類型
+用ldd去看有link哪些share lib
+readelf -s 看.so檔有哪些lib可以用,-s list symbols
+
+or pwntools
+libc = ELF('..../libc.so.6')
+offset = libc.symbols['system']

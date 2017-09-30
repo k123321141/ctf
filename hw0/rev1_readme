@@ -1,0 +1,2 @@
+這次執行檔是32bit 所以記憶體位置是4 byte
+我直接用gdb改ret addr到print_flag
