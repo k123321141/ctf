@@ -25,7 +25,7 @@ while i < (str_len/4):
     a = a+a
     k = k-a
     k = sign2unsigned(k)
-    cl = k % 0x100
+    cl = k % 0x100 #取出最低8個bits
     d = d << cl
     #
     buf = 0 if d == 0 else buf / d
