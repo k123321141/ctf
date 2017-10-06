@@ -1,14 +1,6 @@
 from pwn import *
-
-def getInput(f):
-    with open(f,'rb') as fin:
-        data = fin.read()
-    return data
-def us2s(i):
-    if i >= 0x80000000:
-        i = -1*(2**32 - i)
-    return i
-def s2us(i):
+import struct
+def sign2unsign(i):
     if i < 0:
         i = (2**32 - i)
     return i
@@ -17,10 +9,10 @@ def overflow(i,byte_len = 4):
     return i
     
 
-s = getInput('./in')
+s = raw_input('')
 str_len = len(s)
 
-
+f = open('./flag','wb')
 
 for i in range(str_len):
     j = i+1
@@ -34,7 +26,7 @@ for i in range(str_len):
     d = j
     a = a+a
     k = k-a
-    k = s2us(k)
+    k = sign2unsign(k)
     buf = s[i:i+1]
     buf = ord(buf)
     cl = k % 0x100
@@ -42,5 +34,5 @@ for i in range(str_len):
     buf = buf * d
     buf = buf + 0x2333
     buf = overflow(buf)
-
-
+    f.write(struct.pack('<I',buf))
+f.close()

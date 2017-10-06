@@ -1,6 +1,6 @@
 from pwn import *
 import struct as st
-def s2us(i):
+def sign2unsigned(i):
     return i if i >=0 else (2**32 - i)
 
 with open('./flag','rb') as f:
@@ -24,7 +24,7 @@ while i < (str_len/4):
     d = j
     a = a+a
     k = k-a
-    k = s2us(k)
+    k = sign2unsigned(k)
     cl = k % 0x100
     d = d << cl
     #
