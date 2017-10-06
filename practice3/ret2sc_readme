@@ -1,0 +1,6 @@
+第一次read可將shellcode 放到global variable
+第二次gets可以overflow到shellcode
+
+注意shellcode要用amd64編
+另外輸入要很長 要超過global variable跟gets的buf長度
+FLAG{6EWQLMK1GDzMlV6vPFokzmtux4Fh42yJ}
