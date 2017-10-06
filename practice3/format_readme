@@ -1,0 +1,46 @@
+透過disassembly call
+觀察有用到的function call
+猜出這是一個猜數字遊戲
+而printf可以透過參數%i$d 顯示從stack基準往上算 第i個整數
+利用gdb觀察時
+隨機數存放在位置0xffffd62c
+而 
+%6$d            ->  0xffffd538 
+%7$d            ->  0xffffd53c
+故得出
+%67$d           ->  0xffffd62c
+
+於是得出輸入%67$d則可得到隨機數
+而程式將print flag
+此次練習不需要得到shell
+
+注意：在本機練習時需要創建一個flag檔
+因為程式是讀取flag 檔
+當猜中print出來
+
+以下是盡量還原的c code function
+
+
+
+f = open('./flag','r')
+
+
+def readflag()
+    0xffffd440 = read()     0xffffd440
+    strcopy to  0xffffd538  0xffffd538  
+    ret esp =   0xffffd51c  0xffffd51c
+
+
+
+
+
+scanf('%40s',name)
+printf('Hi %s',name)
+
+scanf('%d',password)
+
+if(pass == )
+
+
+free(0xffffd538)
+
