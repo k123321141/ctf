@@ -4,12 +4,15 @@
 	|
 	---shell_script 是這次使用的shell script
 	|
-	---shellcode 是組譯過後的binary file
+	---payload      設計過後的binary 輸入
 	|
-	---gothijack
+    ---script.py    使用pwntools的python script 檔案
+	|
+    ---gothijack
 	|
 	---readme
-使用(cat shellcode;cat) | ./gothijack
+使用(cat payload;cat) | ./gothijack
+或是python2 ./script.py
 ------------
 
 分析程式流程:
