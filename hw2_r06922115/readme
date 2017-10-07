@@ -1,0 +1,84 @@
+
+---檔案夾中---------
+-hw2_r06922115
+	|
+	---shell_script 是這次使用的shell script
+	|
+	---shellcode 是組譯過後的binary file
+	|
+	---gothijack
+	|
+	---readme
+使用(cat shellcode;cat) | ./gothijack
+------------
+
+分析程式流程:
+
+接收一次輸入放到位於global variable 的username
+what's name 	->	read_input(username,int 0x30)
+之後會經過check function 檢查strlen(username)個byte 判斷是否通過isalnum()
+
+之後再接受一次輸入 這次buf在stack之中
+where write 	->	read_input(buf,int 0x18)
+
+最後輸入欲寫入的值
+data		->	read_input(addr	,int0x8)
+addr是由第二次輸入的值 經過strtoll轉乘的地址 -> strtoll(buf)
+
+注意，因為strlen function判斷username遇到'\0'就會停下
+所以check(username)時 可以把shellcode 放在'\0'就可以通過檢查
+而利用WriteSomething可以透過GOT hijack跳到shellcode
+
+
+-----------
+這次輸入都是使用read function所以觀察寫在assembly code的固定大小可以控制memory
+詳細輸入:
+out('A'*7+'\0' + shellcode + nop*10 + '601020' + '\0'*18 + p64(0x6010a8) )
+'A'*7 + '\0'   	#方便我對齊shellcode
+shellcode	#
+nop*8		#補齊48 bytes
+ 
+'601020'	#會被strtoll轉成64 bit address -> 0x601020 指向GOT puts位置
+'B'*18		#補齊24 byte
+
+p64(0x6010a8)	#跳到username + 8的位置 執行shellcode
+
+
+-----------
+過程與想法：
+GOT位置不變的關係，透過第二次輸入就可以指定更改GOT
+但是執行檔中並沒有system可以用
+並且根據執行流程只有_exit@plt跟puts@plt有機會執行
+而puts在read_input中也有被call
+所以ret2text也不好發揮，ret2lib也沒有lib版本
+考慮到第一個輸入 username尚未發生作用
+應該是提示，於是檢查了check function
+透過放入shellcode 再跳到位置不變的global variable
+就可以執行shellcode
+
+
+
+
+
+-----------
+以下是根據組語猜測出來的c style code
+幫助分析程式
+
+function argv table and passing register:
+
+read_input(char *buf	,int size)
+read_input(rdi,esi)
+
+read(int fildes, void *buf, size_t nbytes);
+fildes = 0 -> stdin ,1 -> stdout, 2 -> strerr
+read(edi,rsi,edx)
+
+long long int strtoll (const char* str, char** endptr, int base);
+strtoll(rdi, esi,16)
+
+備註：
+read_input 會檢查最後一byte若為\n(0xa)則換成\0
+
+check(*buf) - > check(rdi)
+檢查buf裡面是否都是[0-9][a-zA-Z] 用strlen算長度
+所以將第一個放'A\0'之後就可以通過檢查 後面就可以放shellcode

