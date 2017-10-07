@@ -6,9 +6,9 @@
 	|
 	---payload      設計過後的binary 輸入
 	|
-    ---script.py    使用pwntools的python script 檔案
+	---script.py    使用pwntools的python script 檔案
 	|
-    ---gothijack
+	---gothijack
 	|
 	---readme
 使用(cat payload;cat) | ./gothijack
