@@ -1,0 +1,1 @@
+objdump -T lib.so 可以找到funtion 在lib裡的offset
