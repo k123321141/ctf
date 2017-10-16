@@ -20,7 +20,6 @@ xor_eax = p64(0x4014d0)                 #0x00000000004014d0 : xor eax, eax ; ret
 pop_rdi = p64(0x401456)                 #0x0000000000401456) # pop rdi ; ret
 pop_rdx = p64(0x4427e6)                 #0x00000000004427e6 : pop rdx ; ret
 mov_rax_rdx = p64(0x426d58)             #0x0000000000426d58 : mov rax, rdx ; ret
-leave_ret = p64(0x400988)               #0x0000000000400988 : leave ; ret
 
 
 #set rdi
