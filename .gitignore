@@ -4,4 +4,4 @@
 *.png
 *.jpg
 *gdb_history
-*peda-session-ret2plt.txt
+*peda*
