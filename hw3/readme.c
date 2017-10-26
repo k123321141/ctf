@@ -9,3 +9,4 @@ int main(){
 	read(0,buf,0x30);
 	return 0 ;
 }
+ 

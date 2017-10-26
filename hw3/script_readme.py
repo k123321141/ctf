@@ -15,11 +15,11 @@ context.arch = 'amd64'
 
 #buf1 -> 0x0601c00,buf2 ->0x0601d00
 
-r = remote('127.0.0.1',8888)
-#r = remote('csie.ctf.tw',10132)
+#r = remote('127.0.0.1',8888)
+r = remote('csie.ctf.tw',10135)
 
 r.recvuntil(':')
-r.interactive()
+#r.interactive()
 buf1_addr = 0x0601b80
 buf2_addr = 0x0601d00
 buf3_addr = 0x0601e00
