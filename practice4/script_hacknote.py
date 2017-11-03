@@ -1,20 +1,15 @@
 from pwn import *
-
+from time import sleep
 context.arch = 'amd64'
 
 #r = remote('csie.ctf.tw',10137)
-r = remote('localhst',8888)
+r = remote('localhost',8888)
 #r.interactive()
 size = '64'
-content = 'faceb00c'
+content = 'aaa'
 
 #first two
-r.send('1')
+r.sendline('1')
 r.send(size)
 r.send(content)
-
-r.send('1')
-r.send(size)
-r.send(content)
-#
 r.interactive()
