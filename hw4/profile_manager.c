@@ -66,17 +66,24 @@ void add_profile(){
 		if(!p[i].is_valid){
 			printf("Name :");
 			read(0,buf,16);
-			p[i].name = strdup(buf);
+            
+            #傳回一塊malloc出來的空間 並且將buf內容copy到該空間 使用者要自己free新建的空間
+			#漏洞 會有之前殘留值 可以做info leak
+            p[i].name = strdup(buf);
 			printf("Age :");
+            #輸入非數字最後會變成0
 			p[i].age = read_int();
 			printf("Length of description :");
 			size = read_int();
+            #not fast bin
 			if(size < 0x90){
 				puts("Length must be larger than 0x90");
 				free(p[i].name);
 				return ;
 			}
 			printf("Description :");
+            #配置1個大小為size的空間
+            #漏洞 可以輸入-1導致跳出 而name及age已經被設置
 			tmp = calloc(1,size);
 			if(!tmp){
 				puts("Allocate Error !");
@@ -123,17 +130,23 @@ void edit_profile(){
 	if(p[idx].is_valid){
 		printf("Name :");
 		read(0,buf,16);
+        #if the src address is smaller than new length
+        #free the old variable,then malloc a new address to tmp
 		tmp = realloc(p[idx].name,strlen(buf));
 		if(!tmp){
 			puts("Realloc Error !");
 			return ;
 		}
 		p[idx].name = tmp;
+        #漏洞 copy len(buf) buf到name 沒有補上0 結尾字元
+        #沒用 buf最長buf 不管怎樣都是malloc 0x20
 		strncpy(p[idx].name,buf,strlen(buf));
 		tmp = NULL ;
 		printf("Age :");
 		p[idx].age = read_int();
 		printf("Description :");
+        #讀入比之前的desc等長或更短的字串
+        #漏洞 透過接上之前的malloc出來的殘留值 就可以填超過chunk做overflow 只可以更改prev size
 		read(0,p[idx].desc,strlen(p[idx].desc));
 		puts("Done !");
 	}else{
