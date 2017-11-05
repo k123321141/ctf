@@ -6,8 +6,6 @@
 #include <signal.h>
 #include <time.h>
 #define TIMEOUT 60
-
-
 struct profile{
 	bool is_valid ;
 	unsigned int age ;
@@ -132,6 +130,8 @@ void edit_profile(){
 		read(0,buf,16);
         #if the src address is smaller than new length
         #free the old variable,then malloc a new address to tmp
+        #漏洞 realloc(ptr,0) 會被當成 free(ptr) 傳'\x00'*16過去
+        #之後就會有free after use
 		tmp = realloc(p[idx].name,strlen(buf));
 		if(!tmp){
 			puts("Realloc Error !");
