@@ -1,8 +1,8 @@
 from pwn import *
 context.arch = 'amd64'
 
-r = remote('csie.ctf.tw',10138)
-#r = remote('localhost',8888)
+#r = remote('csie.ctf.tw',10138)
+r = remote('localhost',8888)
 
 #r.interactive()
 def add_item(size,name):
