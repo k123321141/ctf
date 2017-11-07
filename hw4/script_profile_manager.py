@@ -4,8 +4,8 @@ from time import sleep
 context.arch = 'amd64'
 
 #可發現到 realloc(ptr,0) 會被當成 free(ptr)
-#r = remote('csie.ctf.tw',10138)
-r = remote('localhost',8888)
+r = remote('csie.ctf.tw',10140)
+#r = remote('localhost',8888)
 
 #r.interactive()
 size = '64'
