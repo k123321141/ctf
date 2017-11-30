@@ -48,6 +48,9 @@ void allocate_heap(){
 	heap = malloc(size);
 	if(heap){
 		printf("Data :");
+        //first time leak the info about top chunk size
+        //second time, fake the chunk size
+        //maybe leak spot, why size + 8?
 		read_input(heap,size+8);
 		puts("Done !");
 	}else{
