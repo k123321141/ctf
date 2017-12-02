@@ -1,8 +1,12 @@
 from pwn import *
+import sys
 context.arch = 'amd64'
 
-#r = remote('csie.ctf.tw',10141)
-r = remote('localhost',8888)
+print sys.argv
+if len(sys.argv) == 2 and sys.argv[1] == 'remote':
+    r = remote('csie.ctf.tw',10141)
+else:
+    r = remote('localhost',8888)
 #r.interactive()
 def allocate(size,data):
     r.sendline('1')
