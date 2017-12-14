@@ -27,10 +27,10 @@ def try_str(s):
 def main():
 
     #alphabet = string.ascii_uppercase + string.ascii_lowercase + '1234567890' + ' -=[],./`~!@#$%^&*()_+{}:<>?'
-    alphabet = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~ \t\n\r\x0b\x0c'
+    alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~1234567890 \t\n\r\x0b\x0c'
     t = len(alphabet)
     maximum = 0
-    s = 'CTF{PinBJ1\tX:z7t(Tt'
+    #s = 'CTF{PinADXAnInterfaceforCustomizableDebuggingwithDynamicInstrumentation'
     s = ''
     while True:
         correct_char = ''
@@ -51,7 +51,7 @@ def main():
                     break
                 maximum = max(maximum , count)
             else:
-                print 'correct string : [%s]' % s
+                print 'correct string : [%s]' % (s+c)
                 return
         if correct_char == '':
             print 'char is not in alphabet'
