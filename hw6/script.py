@@ -2,10 +2,15 @@ import sys,os,string
 import subprocess
 import time
 from subprocess import Popen, PIPE
-#/home/k99/lib/pin-3.5-97503-gac534ca30-gcc-linux/pin -t /home/k99/lib/pin-3.5-97503-gac534ca30-gcc-linux/source/tools/ManualExamples/obj-intel64/inscount0.so -- ./break
+from os.path import expanduser,join
 
-pin ='/home/k99/lib/pin-3.5-97503-gac534ca30-gcc-linux/pin'
-insc = '/home/k99/lib/pin-3.5-97503-gac534ca30-gcc-linux/source/tools/ManualExamples/obj-intel64/inscount0.so'
+"""
+    Hard coding path
+"""
+home = expanduser("~")
+pin = join(home,'lib','pin-3.5-97503-gac534ca30-gcc-linux','pin')
+insc = join(home,'lib','pin-3.5-97503-gac534ca30-gcc-linux','source','tools','ManualExamples','obj-intel64','inscount0.so')
+
 command = '%s -t %s -- ./break' % (pin,insc)
 threshold = 50
 def read_ints():
