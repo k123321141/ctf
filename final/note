@@ -1,0 +1,26 @@
+magicheap
+
+先malloc(0x50) -> chunk size 0x60
+然後有一個global variable p 0x6020a0
+讀入0x18 bytes 放到p 
+是一個struct 前0x18 byte放name 後面放指到heap 第一個位置大小為0x60的chunck
+
+漏洞在read_input並沒有做最後字尾補上\0
+開始找strlen的漏洞
+
+程式流程為p指標為一個結構
+struct{
+    name = *char[0x18]
+    ptrs = *char[10]
+}
+
+del heap時會取消陣列 ptrs[i] = Null
+
+partial relro
+
+開始檢查edit_heap有沒有漏洞:
+edit 讀入4個bybe然後用atoi做index
+
+edit 出現overflow漏洞
+edit不檢查長度 直接複寫 所以可以overflow
+
