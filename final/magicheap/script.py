@@ -42,6 +42,7 @@ def leak(idx):
     Write up
     
     --------
+    partial relro 先打GOT
     首先name我不知道是要幹嘛用的
     宣告了3個fastbin大小的chunk 避免merge到top chunk
     要利用前兩個做fastbin corruption直接改掉free got -> puts
