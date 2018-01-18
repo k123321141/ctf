@@ -1,0 +1,21 @@
+0x000d2819 : aaa ; xor edx, edx ; pop ebx ; mov eax, edx ; pop esi ; pop edi ; ret
+0x000ea8c6 : add esp, 4 ; xor edx, edx ; mov eax, edx ; pop ebx ; pop esi ; ret
+0x000f40f6 : je 0xf4111 ; xor edx, edx ; div ebx ; pop ebx ; pop esi ; pop edi ; ret
+0x0007c873 : jne 0x7c86e ; xor edx, edx ; mov eax, edx ; ret
+0x0007c895 : jne 0x7c890 ; xor edx, edx ; mov eax, edx ; ret
+0x00140673 : les ebx, ptr [eax] ; xor eax, eax ; xor edx, edx ; pop ebx ; pop esi ; pop edi ; ret
+0x000d2818 : mov dword ptr [edi], esi ; xor edx, edx ; pop ebx ; mov eax, edx ; pop esi ; pop edi ; ret
+0x0007c871 : test al, al ; jne 0x7c870 ; xor edx, edx ; mov eax, edx ; ret
+0x0007c893 : test al, al ; jne 0x7c892 ; xor edx, edx ; mov eax, edx ; ret
+0x00140675 : xor eax, eax ; xor edx, edx ; pop ebx ; pop esi ; pop edi ; ret
+0x00001a18 : xor edx, dword ptr [edx - 0x7b] ; mov bl, 0xee ; enter 0x59e7, 0x5b ; ret 0x2a63
+0x000bd69f : xor edx, edx ; add esp, 4 ; mov eax, edx ; pop ebx ; pop esi ; ret
+0x000f40f8 : xor edx, edx ; div ebx ; pop ebx ; pop esi ; pop edi ; ret
+0x000f4021 : xor edx, edx ; div esi ; pop ebx ; pop esi ; pop edi ; pop ebp ; ret
+0x000ea8c9 : xor edx, edx ; mov eax, edx ; pop ebx ; pop esi ; ret
+0x0007c875 : xor edx, edx ; mov eax, edx ; ret
+0x0004469b : xor edx, edx ; pop ebx ; div esi ; pop esi ; pop edi ; add eax, ecx ; ret
+0x000acdc3 : xor edx, edx ; pop ebx ; mov eax, edx ; pop esi ; pop edi ; pop ebp ; ret
+0x000d281a : xor edx, edx ; pop ebx ; mov eax, edx ; pop esi ; pop edi ; ret
+0x00140677 : xor edx, edx ; pop ebx ; pop esi ; pop edi ; ret
+0x00108513 : xor edx, esi ; lock inc dword ptr [ebx + 0x5e5b14c4] ; ret
