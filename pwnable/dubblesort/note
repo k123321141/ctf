@@ -1,0 +1,32 @@
+首先read 0x40 byte到stack裡
+
+注意這裡使用printf('Hello %s,How many numbers do you what to sort', name)
+所以要用這裡去leak info
+由於是printf_chk 所以無法用fmt攻擊
+
+checksec
+
+CANARY    : ENABLED
+FORTIFY   : ENABLED
+NX        : ENABLED
+PIE       : ENABLED
+RELRO     : FULL
+
+
+思路1.
+main frame宣告了0x80的記憶體
+這題應該是排序的時候會造成stack overflow覆寫main ret address
+
+決定使用rop chain
+要先leak canary以及stack base
+canary offset  : [esp+0x7c], main+319, esp:0xffffd670, 0xffffd6ec
+name 從esp+0x3c開始 讀0x40 bytes,0xffffd6ac
+思路2.
+
+更正思路1. 不需leak canary 只需要留意canary的位置就行了
+需要leak stack base,利用先前輸入的name  
+0,0,0,0,0,0,0,0,canary,big,big
+name輸入    :   0xffffd6ac  0x40
+排序數輸入  :   0xffffd68c  可控
+canary      :   0xffffd6ec  可用scanf('%s')輸入'+'跳過，不覆蓋
+ret addr    :   0xffffd70c  小心控制排序順序即可
