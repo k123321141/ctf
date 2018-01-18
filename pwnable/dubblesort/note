@@ -26,7 +26,10 @@ name 從esp+0x3c開始 讀0x40 bytes,0xffffd6ac
 更正思路1. 不需leak canary 只需要留意canary的位置就行了
 需要leak stack base,利用先前輸入的name  
 0,0,0,0,0,0,0,0,canary,big,big
-name輸入    :   0xffffd6ac  0x40
+name輸入    :   0xffffd6ac  0x40,   用來放rop
 排序數輸入  :   0xffffd68c  可控
 canary      :   0xffffd6ec  可用scanf('%s')輸入'+'跳過，不覆蓋
 ret addr    :   0xffffd70c  小心控制排序順序即可
+
+
+rop 要控eax=0x0b, ebx='/bin//sh\0', ecx=0, edx預設為0
