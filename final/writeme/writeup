@@ -1,0 +1,21 @@
+writeme
+
+Write up by r06922115 鄭皓謙
+--------滲透流程----------
+看到partial relro 先打GOT
+
+先用printf got, leak 出libc base
+然後將printf got覆蓋成libc裡面的one gadget拿到shell
+
+
+--------程式分析---------
+checksec
+CANARY    : ENABLED
+FORTIFY   : disabled
+NX        : ENABLED
+PIE       : disabled
+RELRO     : disabled
+
+輸出給定位址的值，然後寫入指定值
+
+-------------------------

@@ -1,0 +1,61 @@
+magicheap
+
+Write up by r06922115 鄭皓謙
+--------滲透流程----------
+看到partial relro 先打GOT
+
+首先name我不知道是要幹嘛用的
+
+利用double free fastbin
+宣告了3個fastbin大小的chunk, 記得要避免merge到top chunk
+要利用前兩個做fastbin corruption直接改掉free got -> puts
+
+接下來使用非fastbin 大小的chunk free掉時會存有fd, bk資訊特性
+宣告三個unsorted bin大小的chunk 
+先free掉其中一個 使其存有unsorted bin的位置資訊 用來做libc base leak
+透過重複宣告同樣大小的chunk，利用puts得到libc位置
+
+再利用先前hijcak got的方式把free改成system
+free掉存有/bin//sh\0的chunk得到shell
+
+
+
+--------程式分析---------
+checksec
+CANARY    : disabled
+FORTIFY   : disabled
+NX        : disabled
+PIE       : ENABLED
+RELRO     : Partial
+
+先malloc(0x50) -> chunk size 0x60
+然後有一個global variable p 0x6020a0
+讀入0x18 bytes 放到p 
+是一個struct 前0x18 byte放name 後面放指到heap 第一個位置大小為0x60的chunck
+
+p指標為一個結構
+struct{
+    name = *char[0x18]
+    ptrs = *char[10]
+}
+del heap時會取消陣列 ptrs[i] = Null
+-------------------------
+1.
+開始找潛在的漏洞
+
+漏洞在read_input並沒有做最後字尾補上\0
+
+2.
+開始找strlen的漏洞
+
+開始檢查edit_heap有沒有漏洞:
+edit 讀入4個bybe然後用atoi做index
+
+edit 出現overflow漏洞
+edit不檢查長度 直接複寫 所以可以overflow
+
+3.
+partial relro
+開始打got
+-------------------------
+
