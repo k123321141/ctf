@@ -1,4 +1,7 @@
- ## 流程
+# NTU 計算機安全 2017 spring的作業筆記
+各題解法寫在小題的readme裡面</br>
+ 
+## 流程
  file path-to-file</br> 
  檢查binary code, 32/64 bits</br>
 
